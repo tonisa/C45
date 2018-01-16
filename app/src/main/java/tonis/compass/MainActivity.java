@@ -7,10 +7,14 @@ import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     CompassView compass;
+    TextView azimuthLabel;
+
     SensorManager sensorManager;
     float[] mGravity = new float[3];
     float[] mGeomagnetic = new float[3];
@@ -23,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
 
         compass = (CompassView) this.findViewById(R.id.compass);
-        assert compass != null;
+        azimuthLabel = (TextView)this.findViewById(R.id.azimuth);
 
         sensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
     }
@@ -67,14 +71,27 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
                 if (azimuth == lastAzimuth) return;
-                lastAzimuth = azimuth;
 
-                compass.setAzimuth(azimuth);
+                lastAzimuth = azimuth;
                 Log.i("compass", String.format("Azimuth is %d deg, %.2f rad, %.2f rawdeg", azimuth, azimuthInRadians, Math.toDegrees(azimuthInRadians)));
+
+                updateAzimuth(azimuth);
             }
             else
                 Log.i("compass", "getRotationMatrix failed");
         }
+    }
+
+    private void updateAzimuth(int azimuth) {
+        compass.setAzimuth(azimuth);
+        azimuthLabel.setText("asimuut " + azimuthLabel(azimuth));
+    }
+
+    private String azimuthLabel(int degrees) {
+        String[] labels = {"N","NE","E","SE", "S","SW","W","NW"};
+        int skewed = (degrees + 22) % 360;
+        int index = (Math.round((skewed / 45)) % 8);
+        return labels[index];
     }
 
     @Override

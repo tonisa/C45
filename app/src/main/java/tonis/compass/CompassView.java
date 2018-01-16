@@ -13,7 +13,7 @@ import static java.lang.Math.sin;
 
 public class CompassView extends View {
 
-    private int degrees;
+    private int azimuth;
 
     private float centerX = 0.0f;
     private float centerY = 0.0f;
@@ -28,7 +28,7 @@ public class CompassView extends View {
     }
 
     private void init() {
-        degrees = 0;
+        azimuth = 0;
         lineStyle.setColor(Color.BLACK);
         lineStyle.setStrokeWidth(12f);
         textStyle.setTextSize(textSize);
@@ -57,20 +57,13 @@ public class CompassView extends View {
 
         if (centerX == 0.0F) initCenter();
 
-        double radians = Math.toRadians(degrees);
+        double radians = Math.toRadians(azimuth);
 
         Log.i("draw", String.format("radians %.2f", radians));
 
         canvas.drawLine(X(radians, 50.0), Y(radians, 50.0), X(radians, arrowLength), Y(radians, arrowLength), lineStyle);
 
-        canvas.drawText(toLabel(degrees), X(radians, arrowLength + textSize), Y(radians, arrowLength + textSize), textStyle);
-    }
-
-    private String toLabel(int degrees) {
-        String[] labels = {"N","NE","E","SE", "S","SW","W","NW"};
-        int skewed = (degrees + 22) % 360;
-        int index = (Math.round((skewed / 45)) % 8);
-        return labels[index];
+        canvas.drawText("N", X(radians, arrowLength + textSize), Y(radians, arrowLength + textSize), textStyle);
     }
 
     private float Y(double radians, double arrowLength) {
@@ -83,7 +76,7 @@ public class CompassView extends View {
     }
 
     public void setAzimuth(int azimuth) {
-        this.degrees = azimuth;
+        this.azimuth = azimuth;
         invalidate();
     }
 }

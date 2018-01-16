@@ -16,8 +16,18 @@
         android:background="@color/transparent"/>
 
     <TextView
+        android:id="@+id/text_helper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello Compass" />
+        android:layout_centerHorizontal="true"
+        android:text="Keera telefoni ülemine külg kaamera vaatamissuunda" />
+
+    <TextView
+        android:id="@+id/azimuth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/text_helper"
+        android:text="asimuut xx" />
 
 </RelativeLayout>
